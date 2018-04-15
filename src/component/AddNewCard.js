@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
-import CardContainter from './CardContainter';
+import './AddNewCard.css';
+import MapContainer from './MapContainer';
 
 class AddNewCard extends Component {
   state = {
     weatherData: [],
+    zipcode: '',
     isLoading: false,
     units: 'imperial',
+    kuid: '',
+    locations: '',
   }
 
-  generateKey = (x) => {
-    const str = x.replace(/\s+/g, '').toLowerCase();
+  generateKey = (input) => {
+    const str = input.replace(/\s+/g, '').toLowerCase();
     return `${str}_${new Date().getTime()}`;
   }
 
@@ -19,15 +22,15 @@ class AddNewCard extends Component {
   }
 
   fetchWeatherData = (LOCATION, UNITS) => {
-    const APIKEY = '4a109b71b9191ad4da692d41c1f8c3bd';
     this.setState({ isLoading: true });
+
+    const APIKEY = '4a109b71b9191ad4da692d41c1f8c3bd';
     const WEATHER_API = `https://api.openweathermap.org/data/2.5/weather?zip=${LOCATION},us&units=${UNITS}&APPID=${APIKEY}`;
-    // const WEATHER_API = 'https://api.openweathermap.org/data/2.5/weather?zip=44406,us&units=imperial&APPID=4a109b71b9191ad4da692d41c1f8c3bd'
 
     fetch(WEATHER_API)
-    .then(res => { return res.json(); })
+    .then(response => { return response.json(); })
     .then(data => {
-      const newData = { id: this.generateKey(data.name), ...data };
+      const newData = { uid: this.state.kuid, zip: this.state.zipcode, ...data };
       this.setState({
         weatherData: [...this.state.weatherData, newData],
         isLoading: false,
@@ -37,24 +40,60 @@ class AddNewCard extends Component {
   }
 
   handleSubmit = (event) => {
-    event.preventDefault();
-    const location = this.state.zipcode;
-    const units = this.state.units;
+    if (this.canBeSubmitted()) {
+      event.preventDefault();
 
-    this.setState({ id: this.generateKey(location) });
-    this.fetchWeatherData(location, units);
-    console.log('fetching weather data for', this.state.zipcode);
+      const { zipcode, units } = this.state;
+
+      this.fetchWeatherData(zipcode, units);
+      this.setState({ kuid: this.generateKey(zipcode), locations: [...this.state.locations, zipcode] });
+
+      console.log('submitted a weather data request for', this.state.zipcode);
+      event.target.reset()
+    }
+  }
+
+  canBeSubmitted() {
+    const { zipcode } = this.state;
+    return (
+      // eslint-disable-next-line
+      zipcode.length == 5 && !isNaN(zipcode)
+    );
   }
 
   render() {
+    const isOK = this.canBeSubmitted();
+
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
           <input name='zipcode' type='text' placeholder='Zipcode' onChange={this.handleChange} />
-          <button>Add card</button>
+          <button disabled={!isOK}>Add card</button>
         </form>
+        <div className='cards-container'>
+        { this.state.weatherData.map( (index) =>
+          <section className='card' key={index.uid}>
+            <div className='map-box'> 
+              <img src='http://via.placeholder.com/340x150' alt=''/>
+              <MapContainer />
 
-        <CardContainter />
+              <div className='info-box overlay'>
+                {Math.round(index.main.temp)}°F 
+                  {index.weather[0].description} 
+                <div className='weather-icon'>{index.weather[0].icon}</div>
+              </div>
+              <div className='delete overlay'>X</div>
+            </div>
+
+            <div className='location-container'>
+              <div className='location'>
+                <div>{index.zip}</div>
+                <h2 className='city-name'>{index.name}</h2>
+              </div>
+            </div>
+          </section>
+        ) }
+        </div>
       </div>
     );
   }

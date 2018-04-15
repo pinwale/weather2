@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
+import Map from './Map';
 
-class CardContainter extends Component {
+class MapContainer extends Component {
   render() {
     return (
       <div>
-        blah blah blah
+        <Map/>
       </div>
     );
   }
 }
 
-export default CardContainter;
+export default MapContainer;
