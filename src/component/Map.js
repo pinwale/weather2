@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import HEREMap, { Marker } from 'react-here-maps';
 
 class Map extends Component {
   render() {
     const center = { lat: 0, lng: 0 };
 
     return (
-      <div>hello
-        {/* <HEREMap 
+      <div>
+        <HEREMap 
           appId="{rwEd74xFpiYlUdJrZCrI}"
           appCode="{MXTJ5Cxy1iQYv-FgYpdWwg}"
           center={center}
@@ -17,7 +16,7 @@ class Map extends Component {
           <Marker {...center}>
             <div className="circle-marker"></div>
           </Marker>
-        </HEREMap> */}
+        </HEREMap>
       </div>
     );
   }
