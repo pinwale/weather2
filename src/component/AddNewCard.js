@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './AddNewCard.css';
-// import MapContainer from './MapContainer';
+import Map from './Map';
 
 class AddNewCard extends Component {
   state = {
@@ -10,7 +10,6 @@ class AddNewCard extends Component {
     units: 'imperial',
     kuid: '',
     locations: '',
-    mapImage: '',
   }
 
   generateKey = (input) => {
@@ -40,19 +39,6 @@ class AddNewCard extends Component {
     })
   }
 
-  fetchMapData = () => {
-    const HERE_MAP_API = ``;
-
-    fetch(HERE_MAP_API)
-    .then(res => { return res.json(); })
-    .then(data => {
-      console.log('fetching map data...');
-      this.setState({
-        mapImage: data
-      })
-    });
-  }
-
   handleSubmit = (event) => {
     if (this.canBeSubmitted()) {
       event.preventDefault();
@@ -63,7 +49,7 @@ class AddNewCard extends Component {
       this.setState({ kuid: this.generateKey(zipcode), locations: [...this.state.locations, zipcode] });
       console.log('submitted a weather data request for', this.state.zipcode);
 
-      // this.fetchMapData();
+      // this.fetchMap();
       // console.log('submitted a map data request for', this.state.zipcode);
 
       event.target.reset()
@@ -80,7 +66,6 @@ class AddNewCard extends Component {
 
   render() {
     const isOK = this.canBeSubmitted();
-    const mapUrl = 'https://image.maps.cit.api.here.com/mia/1.6/mapview?c=52.5159%2C13.3777&z=5&w=130&h=300&f=0&t=2&&app_id=rwEd74xFpiYlUdJrZCrI&app_code=MXTJ5Cxy1iQYv-FgYpdWwg'
 
     return (
       <div>
@@ -90,26 +75,9 @@ class AddNewCard extends Component {
         </form>
         <div className='cards-container'>
         { this.state.weatherData.map( (index) =>
-          <section className='card' key={index.uid}>
-
-            <div className='delete overlay'>X</div>
-            <div className='map-box'>
-              <img src={mapUrl} alt=''/>
-            </div>
-
-            <div className='info-box'>
-              <div className='weather-icon'>{index.weather[0].icon}</div>
-              <div className='weather-temp'> {Math.round(index.main.temp)}°F </div>
-              <div className='weather-description'> {index.weather[0].description} </div>
-            </div>
-
-            <div className='location-container'>
-              <div className='location'>
-                <div>{index.zip}</div>
-                <h2 className='city-name'>{index.name}</h2>
-              </div>
-            </div>
-          </section>
+          <Map 
+            weatherData = {index}
+          />
         ) }
         </div>
       </div>
