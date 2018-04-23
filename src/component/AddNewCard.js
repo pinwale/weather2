@@ -28,7 +28,9 @@ class AddNewCard extends Component {
     const WEATHER_API = `https://api.openweathermap.org/data/2.5/weather?zip=${LOCATION},us&units=${UNITS}&APPID=${APIKEY}`;
 
     fetch(WEATHER_API)
-    .then(response => { return response.json(); })
+    .then(response => { if (response.ok) { return response.json(); }
+    throw new Error('Network response was not ok.'); })
+    // .then(response => { return response.json(); })
     .then(data => {
       const newData = { uid: this.state.kuid, zip: this.state.zipcode, ...data };
       this.setState({
@@ -37,6 +39,7 @@ class AddNewCard extends Component {
       });
       console.log('fetched weather data for', this.state.zipcode);
     })
+    .catch(error => console.error(error));
   }
 
   handleSubmit = (event) => {
@@ -56,12 +59,16 @@ class AddNewCard extends Component {
     }
   }
 
-  canBeSubmitted() {
+  canBeSubmitted = () => {
     const { zipcode } = this.state;
     return (
       // eslint-disable-next-line
       zipcode.length == 5 && !isNaN(zipcode)
     );
+  }
+
+  fetchMapLatLong = () => {
+
   }
 
   render() {
@@ -77,6 +84,7 @@ class AddNewCard extends Component {
         { this.state.weatherData.map( (index) =>
           <Map 
             weatherData = {index}
+            key = {index.uid}
           />
         ) }
         </div>

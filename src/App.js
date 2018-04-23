@@ -19,7 +19,7 @@ const Header = () => {
   return (
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
-      <h1 className="App-title">Welcome to React!</h1>
+      <h1 className="App-title">Just Another Weather App 2</h1>
     </header>
   );
 }
