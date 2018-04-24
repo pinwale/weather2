@@ -18,8 +18,11 @@ class App extends Component {
 const Header = () => {
   return (
     <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <h1 className="App-title">Just Another Weather App 2</h1>
+
+      <h1 className="App-title"> 
+        Just
+        <img src={logo} className="App-logo" alt="spinning atomic logo" />
+        Another Weather App <span className='animate'>2</span></h1>
     </header>
   );
 }

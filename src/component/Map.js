@@ -5,9 +5,10 @@ import '../fonts/weather-icons.css'
 class Map extends Component {
 
   fetchMap = () => {
+    const {lat, lon} = this.props.weatherData.coord;
     const appID = 'rwEd74xFpiYlUdJrZCrI'
     const appCode = 'MXTJ5Cxy1iQYv-FgYpdWwg'
-    const HERE_MAP_API = `https://image.maps.cit.api.here.com/mia/1.6/mapview?c=52.5159%2C13.3777&z=5&w=150&h=300&f=0&t=2&&app_id=${appID}&app_code=${appCode}`;
+    const HERE_MAP_API = `https://image.maps.cit.api.here.com/mia/1.6/mapview?c=${lat}%2C${lon}&z=5&w=150&h=300&f=0&t=2&&app_id=${appID}&app_code=${appCode}`;
   
     return HERE_MAP_API;
   }
@@ -15,7 +16,7 @@ class Map extends Component {
   render() {
     const mapUrl = this.fetchMap();
     const index = this.props.weatherData;
-    let weatherIcon = classNames('cent wi wi-owm-' + index.weather[0].id);
+    let weatherIcon = classNames('wi wi-owm-' + index.weather[0].id);
     
     return (
       <section className='card' key={index.uid}>

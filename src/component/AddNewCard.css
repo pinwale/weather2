@@ -2,24 +2,27 @@
   display: flex;
   flex-flow: row wrap;
   /* align-items: center; */
-  justify-content: center;
+  justify-content: flex-start;
+  align-content: flex-start;
 }
 
 .card {
+  min-height: 351.5px;
   padding: 8px;
-  text-align: center;
+  /* text-align: center; */
   background: snow;
   margin: 20px;
   display: grid;
   grid-template-columns: 150px 50px;
   grid-template-rows: auto;
   position: relative;
+  box-shadow: 2px 2px 2px 2px  gainsboro;
 }
 
 
 .map-box {
+  min-height: 304px;
   grid-row: 1 / span 1;
-  min-height: 310px;
 }
 
 .info-box {
@@ -75,8 +78,8 @@
   margin-top: 2px;
 }
 
-.cent { 
-  margin: 11.5px auto; 
+.center { 
+  margin: 14px 14px; 
 }
 
 .weather-temp {
